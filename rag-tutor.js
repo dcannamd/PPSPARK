@@ -2,14 +2,18 @@
 require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Use the key from .env
+// Use the key from .env (or Render's environment variables)
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-// ✅ MATCHING YOUR WORKING APP
+// 🟢 THE FIX: Updated System Prompt to force citations
 const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash",
     systemInstruction: {
-        parts: [{ text: `You are Bridge Buddy (*SPARK)... [Keep your system prompt here]` }]
+        parts: [{ text: `You are Bridge Buddy (*SPARK), a helpful and expert AI assistant for ProtoPie users. 
+        
+        Your primary goal is to answer questions accurately based ONLY on the provided context. 
+        
+        CRITICAL RULE: Whenever you provide an answer, you MUST list the [SOURCE] URLs provided in the context at the very bottom of your response under a heading called "📚 Resources:". Do not make up URLs. If a source says "Internal Notion", just write "Internal ProtoPie Documentation".` }]
     }
 });
 
